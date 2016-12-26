@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>钟表</title>
+	<style>
+		.clock{
+			width: 300px;
+			height: 300px;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+			border: 7px solid #92C2B6;
+			border-radius: 50%;
+			background: url("clock.jpg") ;
+		}
+		.center{
+			width: 15px;
+			height: 15px;
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+			background: #03A283;
+			border-radius: 50%;
+		}
+	</style>
+</head>
+<body>
+	<div class="clock">
+		<div class="center"></div>
+	</div>
+</body>
+<script>
+	window.onload=function(){
+		// var cw=document.
+		var clock=document.querySelector(".clock");
+		function createMark(){
+			for (var i = 0; i < 60; i++) {
+				var w,h;
+				if(i%5==0){
+					w=5; h=12;
+				}else{
+					w=3; h=6;
+				}
+				//translate(x,y) 移动距离x和y的距离   
+				//rotate(30deg) 旋转的角度
+				//transformOrigin(x,y) 旋转的中心点
+				var div=document.createElement("div");
+				div.style.cssText="width:"+w+"px;height:"+h+"px;background:#03A283;position:absolute;left:0;top:0";
+				div.style.transform="translate("+(300-w)/2+"px,0px) rotate("+i*6+"deg)";  
+				div.style.transformOrigin="center 150px";
+				clock.appendChild(div);
+			};
+		}
+		createMark();
+
+		var time=new Date();  //获取当前的时间
+		var hpointer=createPointer(8,80,"#03A283",time.getHours()*30+time.getMinutes()*6/12);
+		var mpointer=createPointer(6,100,"#03A283",time.getMinutes()*6+time.getSeconds()*6/60);
+		var spointer=createPointer(5,120,"#03A283",time.getSeconds()*6);
+		function createPointer(w,h,c,a){
+			//创建div
+			var div=document.createElement("div");
+			//设定样式
+			div.style.cssText="width:"+w+"px;height:"+h+"px;background:"+c+";position:absolute;left:0;top:0";
+			div.style.transform="translate("+(300-w)/2+"px,"+(150-h)+"px) rotate("+a+"deg)";
+			div.style.transformOrigin="bottom";
+			div.w=w;
+			div.h=h;
+
+			//添加到clock中
+			clock.appendChild(div);
+			return div;
+		}
+
+		setInterval(function(){
+			var time=new Date();			
+			hpointer.style.transform="translate("+(300-hpointer.w)/2+"px,"+(150-hpointer.h)+"px) rotate("+(time.getHours()*30+time.getMinutes()*6/12)+"deg)";
+			mpointer.style.transform="translate("+(300-mpointer.w)/2+"px,"+(150-mpointer.h)+"px) rotate("+(time.getMinutes()*6+time.getSeconds()*6/60)+"deg)";
+			spointer.style.transform="translate("+(300-spointer.w)/2+"px,"+(150-spointer.h)+"px) rotate("+(time.getSeconds()*6)+"deg)";
+			
+		},1000);
+	}
+</script>
+</html>
